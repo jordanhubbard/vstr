@@ -1,4 +1,5 @@
 #include "vstr.h"
+#include <stdlib.h>
 
 ROUTINE void v_free(v)
 register p_vstr v;

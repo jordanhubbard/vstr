@@ -17,14 +17,16 @@ yelp("called with vstr at %x, count of %d, direction = %d\n", v, cnt, dir);
 
 		case FWD:
 			while (cnt && !IS_BACK(v)) {
-				if (++v->cur.u_pos >= v->cur.here->len)
+				if (++v->cur.u_pos >= v->cur.here->len) {
 					if (!(v->cur.here = v->cur.here->next)) {
 						v->cur.here = v->tail;
 						v->cur.u_pos = v->tail->len;
 						break;
 					}
-					else
+					else {
 						v->cur.u_pos = 0;
+					}
+				}
 				cnt--;
 				actual++;
 			}
@@ -32,14 +34,16 @@ yelp("called with vstr at %x, count of %d, direction = %d\n", v, cnt, dir);
 
 		case BACK:
 			while (cnt && !IS_FRONT(v)) {
-				if (--v->cur.u_pos < 0)
+				if (--v->cur.u_pos < 0) {
 					if (!(v->cur.here = v->cur.here->prev)) {
 						v->cur.here = v->head;
 						v->cur.u_pos = -1;
 						break;
 					}
-					else
+					else {
 						v->cur.u_pos = v->cur.here->len - 1;
+					}
+				}
 				actual++;
 				cnt--;
 			}

@@ -1,6 +1,6 @@
 #include "vstr.h"
-
-IMPORT char *malloc();
+#include <stdlib.h>
+#include <string.h>
 
 ROUTINE void v_stov(s, v)
 register char *s;
@@ -23,7 +23,7 @@ ROUTINE char *v_vtos(v)
 register p_vstr v;
 {
 	register char *s;
-	register i = 0;
+	register int i = 0;
 	register char ch;
 
 	entry(v_vtos)
@@ -46,7 +46,7 @@ register p_vstr v;
 register int n;
 {
 	register char *s;
-	register i = 0;
+	register int i = 0;
 	register char ch;
 
 	entry(v_nvtos)

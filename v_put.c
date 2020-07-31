@@ -6,6 +6,8 @@
 #include "vstr.h"
 
 IMPORT p_unit linkin();
+IMPORT void shift();
+IMPORT boolean ripple();
 
 ROUTINE void v_put(v, c, mode)
 register p_vstr v;

@@ -5,6 +5,7 @@
 
 #include "vstr.h"
 #include <stdio.h>
+#include <stdlib.h>
 
 #define PUSH	1
 #define POP		2
@@ -134,15 +135,15 @@ register p_vstr v;
 		fprintf(stderr, "v_show: vstr is NIL\n");
 		end
 	}
-	fprintf(stderr, "Debugging information for vstr at %X\n", v);
-	fprintf(stderr, "Head is at %X, Tail at %X\n", v->head, v->tail);
+	fprintf(stderr, "Debugging information for vstr at %p\n", v);
+	fprintf(stderr, "Head is at %p, Tail at %p\n", v->head, v->tail);
 	fprintf(stderr, "Unit size is %d\n", v->unit_size);
-	fprintf(stderr, "Cursor points to unit %X, position %d\n\n",
+	fprintf(stderr, "Cursor points to unit %p, position %d\n\n",
 	  v->cur.here, v->cur.u_pos);
 	temp = v->head;
 	while (temp) {
 		fprintf(stderr, "prev     unit     next\n");
-		fprintf(stderr, "(%X) <= [%X] => (%X)   ", temp->prev, temp,
+		fprintf(stderr, "(%p) <= [%p] => (%p)   ", temp->prev, temp,
 		  temp->next);
 		if (temp == v->head)
 			fprintf(stderr, "HEAD  ");

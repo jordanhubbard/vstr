@@ -1,4 +1,7 @@
 #include "vstr.h"
+#include <string.h>
+
+IMPORT void linkout();
 
 ROUTINE int v_delete(v, cnt)
 register p_vstr v;
@@ -10,7 +13,7 @@ register int cnt;
 	entry(v_delete)
 
 	if (!cnt)
-		end
+		ret(0)
 	while (cnt) {
 		temp = v->cur.here;
 		n = temp->len - v->cur.u_pos;

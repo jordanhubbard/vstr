@@ -1,5 +1,6 @@
 #include "vstr.h"
 #include <stdio.h>
+#include <stdlib.h>
 
 ROUTINE p_unit linkin(v, mode)
 register p_vstr v;
@@ -36,7 +37,7 @@ yelp("called with vstr at %x, mode = %d\n", v, mode);
 
 		default:
 			freak_out("passed weird mode %d\n", mode);
-			end
+			ret(NULL)
 			break;
 	}
 	ret(temp)
@@ -100,7 +101,7 @@ ROUTINE boolean ripple(v)
 register p_vstr v;
 {
 	struct cursor pos;
-	register int i = COST, p;
+	register int i = COST;
 	register p_unit tmp = v->cur.here;
 	register p_unit dest_u = tmp;
 	register int dest_p = v->cur.u_pos;

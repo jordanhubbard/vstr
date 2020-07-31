@@ -4,8 +4,7 @@
  */
 
 #include "vstr.h"
-
-IMPORT char *malloc();
+#include <stdlib.h>
 
 ROUTINE p_unit new_unit(v)
 register p_vstr v;
