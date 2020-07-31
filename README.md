@@ -1,7 +1,7 @@
 # vstr
 
 Following some perverse impulse, I found one of my very first OSS contributions
-as part of [[comp.sources.unix/volume1|https://ftp.sunet.se/mirror/archive/ftp.sunet.se/pub/usenet/ftp.uu.net/comp.sources.unix/volume1/] (first contribution, first volume - that seems nicely symmetrical!) from back in 1985 (!).
+as part of [comp.sources.unix/volume1](https://ftp.sunet.se/mirror/archive/ftp.sunet.se/pub/usenet/ftp.uu.net/comp.sources.unix/volume1) (first contribution, first volume - that seems nicely symmetrical!) from back in 1985 (!).
 
 I remember writing this code for absolutely no reason other than to see what a simple infinite-length string implementation might look like to write.  I was young then.
 
