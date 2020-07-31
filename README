@@ -1,0 +1,40 @@
+You might want to edit the makefile to put the library and include file
+somewhere else. Currently it's set for /usr/lib and /usr/include/local,
+respectivly. The manual page automatically tries to go in /usr/man/manl,
+you may want to change this as well.
+
+This program has not really been used at all, I'm releasing it 
+mainly to get some feedback on it (this is not to say that it doesn't
+work, there are no KNOWN bugs..). There are two inconsistancies
+in the find and delete commands that might raise some ire, see the
+documentation.
+
+You will probably want to edit vstr.h to suit your tastes, read OPERATION
+for some more vaguely useful information.
+
+There's also a very crude test driver called examp.c.. It wasn't written,
+it just grew.. I include it only so that you may do some rudimentary testing
+if you wish to take the easy way out. No documentation, no support, if
+it was a child I'd disown it. You figure it out.
+
+Please mail any bugs/flames to me so that I may improve the code (the package,
+not examp.c).
+
+I'm also interested in any uses made of it, I haven't figured out
+any myself [ :-) ]... This package can be redistributed and used
+freely with appropriate credit. I am quite curious about the ways
+you may find to use it, any mail/interesting code describing
+this would be appreciated.
+
+
+Future plans include block operations, compaction on the fly, regular
+expression searches (currently not included due to the differences
+in SysV and 4.2 regex(p) code) and any speedups I can think of.
+
+Suggestions gratefully accepted.
+
+
+
+Jordan Hubbard
+May 30th, 1985.
+{decwrl, dual, pesnta}!greipa!jordan

@@ -1,0 +1,64 @@
+The operation of this package is fairly straightforward. A "virtual string"
+(actually, I should have called it a "dynamic" string , but it was too late
+as I didn't want to have to change all those 'v's to 'd's..) Is nothing
+more than a linked list of 'units', each containing a previous and next
+(unit) pointer, a data area and a length word.
+
+The header block allocated by new_vstr contains a head and tail pointer that
+points to the first and last units in the 'chain'. This makes it easy to
+to 'rewind' and 'append' the string. Also in the header block is the 'unit'
+size for that particular vstr. A variable unit size is necessary so that
+v-strings can be 'tuned' for various applications. A larger unit size can
+save an appreciable amount of space on machines where ints and pointers
+are 32 bits (here I have a 10 byte overhead for each unit).
+However, if massive editing is being done, or the expected data is small,
+smaller units pay off. Memory conscious folks should see the footnote at
+the end of this file.
+
+Finally, and probably most important, is a 'cursor'. The cursor is nothing
+more that a structure containing a unit pointer and an offset into it.
+The cursor 'points' nowhere when the string is first created, then moves 
+as characters are added to the string. The cursor will always point
+to one of three locations when the string contains text:
+
+1)	In the 'rewound' state, the cursor points to the first unit in
+	the chain with an offset of -1 (not on any character).
+
+2)	In the 'appended' state, the cursor will point at the last unit
+	with an offset equal to the number of characters in the last unit.
+	Since arrays start at zero, this puts it 'off the end' of the data
+	area for that unit, not on any character.
+
+3)	After a 'get', 'put', 'find' etc. operation, the cursor will point to the
+	character affected by the last operation. If one had just done a 'get'
+	for instance, the cursor would point to the character just gotten.
+
+
+There are also other operations can make use of 'cursors' that the
+user allocates himself. They are described in the manual page.
+
+One might ask why I put a length word in each unit instead of just
+null terminating it. Well, in a word, it's a lot faster when calculating
+the length of the string (which I seem to do a lot) and memory is
+cheap on this machine. This is another area in which I welcome feedback.
+
+One last small thing, I got kind of carried away with the 'debugging'
+features. I found them rather useful for tracing the code as I debugged
+it. You might wish to look at some of the 'wrapper' defines in vstr.h
+and the code in v_debug.c (if the 'id' stack confuses you, just think
+about nested procedure calls). It's all kind of crude, but effective.
+It's also quite usable elsewhere. Please don't flame me for my
+handling of 'variable' arguments. A lot of people don't have varargs
+and I'm certainly not going to vax-kludge it (doesn't work on pyramids
+anyway).
+
+Footnote:
+
+* For people that DON'T have a lot of memory, you might want to consider
+the following (people wishing to create very large vstr's might also look
+into it). Look at the define called LENTYPE in vstr.h. As shipped, it
+is defined as a short (16 bits on my machine). This allows me to
+create and index fairly large units (useful when I slurp in something
+like the termcap file). Some people may find a limit of 127 adequate
+and can change it to a signed char (must be signed). Inversely, some
+may wish to make this an int.

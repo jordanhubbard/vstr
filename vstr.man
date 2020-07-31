@@ -1,0 +1,263 @@
+.TH STRING 3-ucb
+.SH NAME
+
+new_vstr, v_append, v_clear, v_copycursor, v_delete, v_find, v_free, v_get,
+v_length, v_move, v_vtos, v_nvtos, v_put, v_rewind, v_savecursor, v_setcursor,
+v_show, v_span, v_stov
+
+\-virtual string operations
+
+.SH ORIGIN
+4.2BSD
+.SH SYNOPSIS
+.nf
+.B p_vstr new_vstr(unitsize)
+.B int unitsize;
+.PP
+.B void v_append(v)
+.B p_vstr v;
+.PP
+.B void v_clear(v, how)
+.B p_vstr v;
+.B int how;
+.PP
+.B void v_copycursor(c1, c2)
+.B p_cursor c1, c2;
+.PP
+.B int v_delete(v, cnt)
+.B p_vstr v;
+.B int cnt;
+.PP
+.B int v_find(v, ch, dir)
+.B p_vstr v;
+.B char ch;
+.B int dir;
+.PP
+.B void v_free(v)
+.B p_vstr v;
+.PP
+.B int v_get(v, mode)
+.B p_vstr v;
+.B int mode;
+.PP
+.B int v_length(v, how)
+.B p_vstr v;
+.B int how;
+.PP
+.B char *vtos(v)
+.B p_vstr v;
+.PP
+.B char *nvtos(v, n)
+.B p_vstr v;
+.B int n;
+.PP
+.B void v_put(v, ch, mode)
+.B p_vstr v;
+.B char ch;
+.B int mode;
+.PP
+.B void v_rewind(v)
+.B p_vstr v;
+.PP
+.B void v_setcursor(v, c)
+.B p_vstr v;
+.B p_cursor c;
+.PP
+.B p_cursor v_savecursor(v, c)
+.B p_vstr v;
+.B p_cursor c;
+.PP
+.B void v_show(v)
+.B p_vstr v;
+.PP
+.B int v_span(c1, c2)
+.B p_cursor c1, c2;
+.PP
+.B void v_stov(s, v)
+.B char *s;
+.B p_vstr v;
+.PP
+.fi
+.SH DESCRIPTION
+These functions allow the creation and manipulation of 'virtual' strings.
+That is, strings that expand and contract as characters are added or deleted.
+Unlike conventional strings, virtual strings have 'cursors' that can be
+moved around in the string determining where operations will take place.
+.PP
+.I new_vstr
+allocates space for a new virtual string header and returns a pointer
+to it. Subsequent memory allocations will be in
+.I unitsize
+byte chunks..
+.PP
+.I v_append
+moves the cursor to the last (append) position in string
+.I v.
+.PP
+.I v_clear
+deletes characters from string
+.I v
+in one of two ways. If
+.I how
+is set to the constant 'END' then text is deleted from the cursor
+position to the end of the string. If set to anything else, the entire
+string is deleted.
+.PP
+.I v_copycursor
+copies the contents of cursor
+.I c2
+to
+.I c1.
+.PP
+.I v_delete
+deletes
+.I cnt
+characters from
+.I v
+starting at the
+.I current
+cursor position until
+.I cnt
+is exhausted or the end of the string is hit. Does not move the cursor
+(Characters slide over from the right). Returns the number of characters
+actually deleted.
+.PP
+.I v_find
+searches through string
+.I v
+for char
+.I ch
+in direction
+.I dir
+until found, or end is hit. If found, a pointer to a cursor is returned
+containing the location of the found character. Since this cursor
+is declared as a local static in
+.I v_find,
+care must be taken to save the contents in an auxiliary cursor if the
+contents are to be preserved across subsequent
+.I v_find
+calls.
+.PP
+.I v_free
+deallocates all space used by string
+.IR v.
+.PP
+.I v_get
+gets a character from
+.I v
+in the following ways depending on
+.I mode.
+If
+.I mode
+is the constant 'HERE' the character at the cursor is returned. Otherwise
+a character is returned after moving cursor one position in direction
+.I mode
+(BACK or FWD).
+Returns the constant ATBEG or ATEND if the cursor cannot be moved
+backwards or forward (the string is rewound or appended).
+.PP
+.I v_length
+returns number of characters in string
+.I v
+in one of three ways, depending on the value of
+.IR how.
+If
+.I how
+is the constant 'HERE', then the total number of characters is returned.
+If
+.I how
+is the constant 'BEG', then the number of characters from the current
+cursor position to the beginning of the string is returned.
+Finally, if
+.I how
+is the constant 'END', then the number of characters from the current
+cursor position to the end of the string is returned.
+(easy enough..)
+.PP
+.I v_vtos
+slurps up characters from the current cursor position in string
+.I v
+to the end. Returns a malloc'd string containing them.
+.PP
+.IR v_nvtos
+is like
+.I vtos
+but only slurps (at most)
+.I n
+characters.
+.PP
+.I v_put
+places character
+.I ch
+in string
+.I v
+depending on the value of
+.I mode.
+If
+.I mode
+is 'HERE', the character is placed
+at the cursor position without moving. If set to 'BACK' or 'FWD, it
+moves backwards or forward and places the character. If mode is 'INS',
+then the character is inserted after the cursor position and
+the cursor is moved forward onto the inserted character.
+.PP
+.I v_rewind
+moves the cursor in string
+to the beginning (rewound) position in string
+.I v.
+.PP
+.I v_setcursor
+sets the cursor in
+.I v
+to the contents of the cursor
+.I c.
+.PP
+.I v_savecursor
+copies the cursor in
+.I v
+to the cursor
+.I c.
+The address of cursor
+.I c
+is returned.
+.PP
+.I v_show
+is mostly for debugging. It displays the header contents of
+.I v
+and shows the structure and contents of the linked list. Some types
+of list corruption are also detected and flagged. Kind of cute, but of
+limited use.
+.PP
+.I v_span
+returns the number of characters between cursor
+.I c1
+and
+.I c2.
+The characters under the cursors are included. This function is
+useful in computing counts for
+.I v_delete, v_move, v_nvtos
+ect.  If one is clever, certain block operations between cursors can be
+done with the aid of this call.
+.PP
+.I v_stov
+puts string
+.I s
+into
+.I v
+at the current cursor position. String is added in a forward direction.
+.PP
+.SH BUGS
+.I v_find
+returns the cursor position of the found character. If a subsequent
+.I v_get
+or
+.I v_put
+is done, you'll get the
+.I next
+character since they both advance the cursor before returning a character.
+This is not really a bug, but potentially confusing.
+.I v_delete
+also acts on the current cursor position, rather that moving then
+deleting. Another potential confuser. (Unless you're using it with
+.I v_find)
+.LP
