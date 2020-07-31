@@ -4,7 +4,7 @@
 
 int i;
 
-eatnl() {
+void eatnl() {
 	register char ch;
 	register int foundnum;
 
@@ -18,9 +18,9 @@ eatnl() {
 		i = 0;
 }
 
-main() {
+int main() {
 		register p_vstr testv = 0;
-		register char *st, fname[40];
+		register char fname[40];
 		char ch;
 		struct cursor save;
 		int going = 1, mode = FWD, cnt, chr;
@@ -96,7 +96,7 @@ main() {
 
 				case 'n':
 					testv = new_vstr(i);
-					printf("Address is %x\n", testv);
+					printf("Address is %p\n", testv);
 					break;
 
 				case 'c':
@@ -190,7 +190,7 @@ main() {
 
 					printf("Search for char: ");
 					scanf("%c", &ch);
-					if (cp = v_find(testv, ch)) {
+					if ((cp = v_find(testv, ch)) != NULL) {
 						printf("Found.\n");
 						v_setcursor(testv, cp);
 					}

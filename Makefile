@@ -20,5 +20,8 @@ install: libvstr.a
 	install -c vstr.man $(PREFIX)/man/manl/vstr.l
 	ranlib $(LIB)/libvstr.a
 
+example: libvstr.a
+	cc -g examp.c libvstr.a -o $@
+
 clean:
-	rm -f $(OBJS) libvstr.a
+	rm -f $(OBJS) libvstr.a example
